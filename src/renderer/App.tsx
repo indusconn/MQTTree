@@ -206,26 +206,41 @@ export function App(): React.JSX.Element {
             <span>MQTT topic tree workspace</span>
           </div>
         </div>
-        <button className="button primary" onClick={openNewConnectionDialog}>
+        <button type="button" className="button primary" onClick={openNewConnectionDialog}>
           <span>＋</span> New connection
         </button>
       </header>
-      <nav className="connection-tabs" role="tablist" aria-label="Broker connections">
+      <nav className="connection-tabs" aria-label="Broker connections">
         {connections.map((connection) => (
           <div
             key={connection.profile.id}
             className={`connection-tab ${activeId === connection.profile.id ? 'active' : ''}`}
           >
+            {activeId === connection.profile.id ? (
+              <button
+                type="button"
+                className="connection-tab-button"
+                aria-pressed="true"
+                aria-label={`${connection.profile.name} ${connection.status.state}`}
+                onClick={() => setActiveId(connection.profile.id)}
+              >
+                <span className={`status-light ${connection.status.state}`} />
+                <span>{connection.profile.name}</span>
+              </button>
+            ) : (
+              <button
+                type="button"
+                className="connection-tab-button"
+                aria-pressed="false"
+                aria-label={`${connection.profile.name} ${connection.status.state}`}
+                onClick={() => setActiveId(connection.profile.id)}
+              >
+                <span className={`status-light ${connection.status.state}`} />
+                <span>{connection.profile.name}</span>
+              </button>
+            )}
             <button
-              role="tab"
-              aria-selected={activeId === connection.profile.id}
-              aria-label={`${connection.profile.name} ${connection.status.state}`}
-              onClick={() => setActiveId(connection.profile.id)}
-            >
-              <span className={`status-light ${connection.status.state}`} />
-              <span>{connection.profile.name}</span>
-            </button>
-            <button
+              type="button"
               className="tab-close"
               aria-label={`Disconnect ${connection.profile.name}`}
               onClick={() => void disconnect(connection.profile.id)}
@@ -235,7 +250,7 @@ export function App(): React.JSX.Element {
           </div>
         ))}
       </nav>
-      {error && <div className="global-error"><span>{error}</span><button onClick={() => setError('')}>×</button></div>}
+      {error && <div className="global-error"><span>{error}</span><button type="button" onClick={() => setError('')}>×</button></div>}
       {loading ? (
         <div className="loading-screen">Opening workspace…</div>
       ) : activeConnection ? (
@@ -259,8 +274,8 @@ export function App(): React.JSX.Element {
             <h2>See every topic as a living hierarchy.</h2>
             <p>Connect securely through port 8883 or 8084, try a public MQTT broker on 1883, inspect messages, publish payloads, and keep several brokers open side by side.</p>
             <div className="hero-actions">
-              <button className="button primary large" onClick={openNewConnectionDialog}>Create your first connection</button>
-              <button className="button ghost large" onClick={() => void saveMosquittoTestProfile()}>Try Mosquitto test broker</button>
+              <button type="button" className="button primary large" onClick={openNewConnectionDialog}>Create your first connection</button>
+              <button type="button" className="button ghost large" onClick={() => void saveMosquittoTestProfile()}>Try Mosquitto test broker</button>
             </div>
           </section>
           <section className="profile-section">

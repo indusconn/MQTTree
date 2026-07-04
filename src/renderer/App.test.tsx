@@ -134,7 +134,7 @@ describe('App', () => {
     expect(await screen.findByText('Production EMQX')).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: 'Connect Production EMQX' }));
 
-    expect(await screen.findByRole('tab', { name: /Production EMQX/ })).toBeInTheDocument();
+    expect(await screen.findByRole('button', { name: 'Production EMQX connected' })).toBeInTheDocument();
     expect(window.mqttTree.broker.connect).toHaveBeenCalledWith('broker-1');
   });
 

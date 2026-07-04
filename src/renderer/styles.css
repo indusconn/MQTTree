@@ -115,8 +115,8 @@ code, pre { font-family: "Cascadia Code", Consolas, monospace; }
 .connection-tabs { height: 42px; display: flex; align-items: stretch; gap: 2px; overflow-x: auto; border-bottom: 1px solid #1d3046; background: #091523; padding-left: 14px; }
 .connection-tab { display: flex; align-items: center; border-right: 1px solid #182c42; min-width: 160px; max-width: 260px; }
 .connection-tab.active { background: #102238; box-shadow: inset 0 -2px #3bd1b5; }
-.connection-tab > button[role="tab"] { flex: 1; display: flex; align-items: center; gap: 8px; border: 0; background: transparent; padding: 0 8px 0 12px; cursor: pointer; overflow: hidden; }
-.connection-tab > button[role="tab"] span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.connection-tab > .connection-tab-button { flex: 1; display: flex; align-items: center; gap: 8px; border: 0; background: transparent; padding: 0 8px 0 12px; cursor: pointer; overflow: hidden; }
+.connection-tab > .connection-tab-button span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .tab-close { border: 0; background: transparent; color: #758ca3; cursor: pointer; padding: 8px; }
 .status-light { display: inline-block; flex: 0 0 auto; width: 8px; height: 8px; border-radius: 50%; background: #60758b; }
 .status-light.connected { background: #40d59f; box-shadow: 0 0 9px rgba(64,213,159,.7); }

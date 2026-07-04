@@ -35,6 +35,7 @@ function PayloadView({ message }: { message: CapturedMessage }): React.JSX.Eleme
         {(['json', 'text', 'hex'] as const).map((option) => (
           <button
             key={option}
+            type="button"
             className={view === option ? 'active' : ''}
             onClick={() => setView(option)}
           >
@@ -239,7 +240,7 @@ export function BrokerWorkspace({
           <span><b>{snapshot.status.evictedMessages.toLocaleString()}</b> evicted</span>
           <IconActionButton icon="edit" label={`Edit profile ${snapshot.profile.name}`} tooltip="Edit connection" onClick={() => onEditProfile(snapshot.profile)} />
           <IconActionButton icon="delete" label={`Delete profile ${snapshot.profile.name}`} tooltip="Delete connection" tone="danger" onClick={() => onDeleteProfile(snapshot.profile)} />
-          <button className="button small ghost" onClick={() => void toggleCapture()}>
+          <button type="button" className="button small ghost" onClick={() => void toggleCapture()}>
             {snapshot.status.capturePaused ? 'Resume capture' : 'Pause capture'}
           </button>
         </div>
@@ -271,15 +272,29 @@ export function BrokerWorkspace({
           </div>
           <div className="inspector-tabs" role="tablist" aria-label="Topic tools">
             {inspectorTabs.map(([value, label]) => (
-              <button
-                key={value}
-                role="tab"
-                aria-selected={tab === value}
-                className={tab === value ? 'active' : ''}
-                onClick={() => setTab(value)}
-              >
-                {label}
-              </button>
+              tab === value ? (
+                <button
+                  key={value}
+                  type="button"
+                  role="tab"
+                  aria-selected="true"
+                  className="active"
+                  onClick={() => setTab(value)}
+                >
+                  {label}
+                </button>
+              ) : (
+                <button
+                  key={value}
+                  type="button"
+                  role="tab"
+                  aria-selected="false"
+                  className=""
+                  onClick={() => setTab(value)}
+                >
+                  {label}
+                </button>
+              )
             ))}
           </div>
           <div className="inspector-content">
@@ -323,7 +338,7 @@ export function BrokerWorkspace({
                 </div>
                 <div className="form-actions">
                   <button type="button" className="button ghost" onClick={() => void saveTemplate()}>Save template</button>
-                  <button className="button primary" aria-label="Publish message">Publish</button>
+                  <button type="submit" className="button primary" aria-label="Publish message">Publish</button>
                   {publishStatus && <span className="form-status">{publishStatus}</span>}
                 </div>
               </form>
@@ -331,11 +346,11 @@ export function BrokerWorkspace({
               <div className="subscription-panel">
                 <form onSubmit={(event) => void addSubscription(event)}>
                   <input aria-label="Subscription filter" value={subscriptionFilter} onChange={(event) => setSubscriptionFilter(event.target.value)} placeholder="factory/+/sensors/#" />
-                  <button className="button primary small">Subscribe</button>
+                  <button type="submit" className="button primary small">Subscribe</button>
                 </form>
                 <div className="subscription-list">
                   {snapshot.subscriptions.map((subscription) => (
-                    <div key={subscription.filter}><code>{subscription.filter}</code><span>QoS {subscription.qos}</span><button className="icon-button" aria-label={`Unsubscribe ${subscription.filter}`} onClick={() => void removeSubscription(subscription.filter)}>×</button></div>
+                    <div key={subscription.filter}><code>{subscription.filter}</code><span>QoS {subscription.qos}</span><button type="button" className="icon-button" aria-label={`Unsubscribe ${subscription.filter}`} onClick={() => void removeSubscription(subscription.filter)}>×</button></div>
                   ))}
                 </div>
               </div>
@@ -343,7 +358,7 @@ export function BrokerWorkspace({
               <div className="log-panel">
                 <div className="log-toolbar">
                   <span>{snapshot.logs.length.toLocaleString()} session events</span>
-                  <button className="button small ghost" onClick={() => void copyLogs()} disabled={snapshot.logs.length === 0}>Copy logs</button>
+                  <button type="button" className="button small ghost" onClick={() => void copyLogs()} disabled={snapshot.logs.length === 0}>Copy logs</button>
                   {copyLogStatus && <span className="form-status">{copyLogStatus}</span>}
                 </div>
                 <div className="log-list">
