@@ -11,12 +11,16 @@ import {
 interface TopicExplorerProps {
   tree: TopicNode[];
   selectedTopic?: string;
+  pulseTopic?: string;
+  pulseKey?: string;
   onSelect(topic: string): void;
 }
 
 export function TopicExplorer({
   tree,
   selectedTopic,
+  pulseTopic,
+  pulseKey,
   onSelect
 }: TopicExplorerProps): React.JSX.Element {
   const [query, setQuery] = useState('');
@@ -32,6 +36,12 @@ export function TopicExplorer({
     () => flattenTopicTree(filterTopicTree(tree, query), collapsed),
     [tree, query, collapsed]
   );
+  const pulseTarget = useMemo(() => {
+    if (!pulseTopic || !pulseKey) return undefined;
+    return rows
+      .filter((row) => pulseTopic === row.topic || pulseTopic.startsWith(`${row.topic}/`))
+      .at(-1)?.topic;
+  }, [pulseTopic, pulseKey, rows]);
   const virtualizer = useVirtualizer({
     count: rows.length,
     getScrollElement: () => scrollRef.current,
@@ -48,11 +58,20 @@ export function TopicExplorer({
     });
   };
 
-  const renderRow = (row: TopicRow): React.JSX.Element => (
-    <div
-      className={`topic-row ${selectedTopic === row.topic ? 'selected' : ''}`}
-      style={{ paddingLeft: 10 + row.depth * 18 }}
-    >
+  const renderRow = (row: TopicRow): React.JSX.Element => {
+    const pulsing = pulseTarget === row.topic;
+    const rowClassName = [
+      'topic-row',
+      selectedTopic === row.topic ? 'selected' : '',
+      pulsing ? 'message-pulse' : ''
+    ].filter(Boolean).join(' ');
+
+    return (
+      <div
+        key={`${row.topic}-${pulsing ? pulseKey : 'idle'}`}
+        className={rowClassName}
+        style={{ paddingLeft: 10 + row.depth * 18 }}
+      >
       <button
         className="tree-toggle"
         aria-label={row.hasChildren ? `Toggle ${row.topic}` : undefined}
@@ -66,8 +85,9 @@ export function TopicExplorer({
         {row.retained && <span className="retained-dot" title="Retained message" />}
       </button>
       <span className="topic-count">{row.messageCount}</span>
-    </div>
-  );
+      </div>
+    );
+  };
 
   return (
     <section className="topic-explorer" aria-label="Topic explorer">

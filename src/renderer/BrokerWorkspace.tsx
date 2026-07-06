@@ -100,6 +100,7 @@ export function BrokerWorkspace({
     );
   }, [snapshot.recentMessages, loadedHistory, selectedTopic]);
   const latestMessage = topicMessages[0];
+  const latestReceivedMessage = snapshot.recentMessages[0];
 
   useEffect(() => {
     setSelectedTopic(undefined);
@@ -251,6 +252,8 @@ export function BrokerWorkspace({
           key={snapshot.profile.id}
           tree={snapshot.topicTree}
           selectedTopic={selectedTopic}
+          pulseTopic={latestReceivedMessage?.topic}
+          pulseKey={latestReceivedMessage?.id}
           onSelect={(topic) => {
             setSelectedTopic(topic);
             setTab('latest');
