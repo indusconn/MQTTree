@@ -193,4 +193,4 @@ Captured broker traffic is kept in memory only and is not persisted.
 
 ## License
 
-Add your preferred license before publishing the repository.
+
